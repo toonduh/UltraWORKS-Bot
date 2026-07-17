@@ -1,31 +1,31 @@
 ---
-title: Discord Eris bot
-description: A Discord bot written using the JavaScript Eris library
+title: UltraWORKS Bot
+description: A Discord.js v14 bot with an Express bridge API for Roblox integration
 tags:
-  - eris
-  - javascript
+  - discord.js
+  - typescript
   - bot
   - discord
+  - express
 ---
 
-# Eris Example
+# UltraWORKS Bot
 
-This example starts a Discord bot using [Eris](https://abal.moe/Eris).
-
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/ioRn64)
+A Discord bot built with [discord.js](https://discord.js.org) v14, exposing slash commands and an Express bridge API used to communicate with Roblox.
 
 ## ✨ Features
 
-- Eris
-- JavaScript
+- Discord.js v14
+- TypeScript
+- Express bridge API for Roblox Open Cloud integration
 
 ## 💁‍♀️ How to use
 
 - Install dependencies `yarn`
 - Connect to your Railway project `railway link`
 - Build the bot `yarn build`
-- Start the bot `railway run node build`
+- Start the bot `railway run node build/index.js`
 
 ## 📝 Notes
 
-The server started launches a Discord bot with a couple of basic commands. The code is located at `src/index.ts`.
+The service starts both the Discord bot (`src/index.ts`) and an Express bridge API (`src/api.ts`) used to relay commands to Roblox.
