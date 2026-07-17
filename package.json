@@ -1,22 +1,21 @@
 {
-	"name": "eris",
+	"name": "ultraworks-bot",
 	"version": "1.0.0",
-	"description": "A discord bot made in Eris.",
-	"main": "src/index.js",
-	"repository": "https://github.com/railwayapp/starters",
-	"author": "Yoshida Tomio",
-	"license": "MIT",
-	"private": false,
+	"description": "Discord → Roblox bridge bot",
+	"main": "src/index.ts",
 	"type": "module",
 	"scripts": {
-		"start": "node build/index.js",
-		"build": "tsc"
+		"build": "tsc",
+		"start": "node build/index.js"
 	},
 	"dependencies": {
-		"eris": "^0.17.1"
+		"discord.js": "^14.27.0",
+		"express": "^5.2.1",
+		"dotenv": "^17.4.2"
 	},
 	"devDependencies": {
+		"@types/express": "^5.0.6",
 		"@types/node": "^18.11.18",
-		"typescript": "^4.9.5"
+		"typescript": "^7.0.2"
 	}
 }

@@ -2,7 +2,12 @@
 	"compilerOptions": {
 		"target": "ESNext",
 		"module": "NodeNext",
-		"outDir": "build",
-		"esModuleInterop": true
-	}
+		"moduleResolution": "NodeNext",
+		"rootDir": "./src",
+		"outDir": "./build",
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"strict": true
+	},
+	"include": ["src/**/*.ts"]
 }
