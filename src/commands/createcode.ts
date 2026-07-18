@@ -5,12 +5,16 @@ import {
 
 import { sendRobloxCommand } from "../utils/bridge.js";
 
+
 const awardConfig: Record<string, {
 	image?: string;
 	color: number;
 }> = {
+
 	coins: {
-		image: "https://www.roblox.com/asset-thumbnail/image?assetId=119376087221654&width=420&height=420&format=png",
+		image:
+			"https://www.roblox.com/asset-thumbnail/image?assetId=119376087221654&width=420&height=420&format=png",
+
 		color: 0xFFD700
 	},
 
@@ -21,13 +25,18 @@ const awardConfig: Record<string, {
 	item: {
 		color: 0x9B59B6
 	}
+
 };
 
 
+
 export default {
+
 	data: new SlashCommandBuilder()
+
 		.setName("createcode")
 		.setDescription("Creates a redeemable code")
+
 
 		.addStringOption(option =>
 			option
@@ -36,12 +45,14 @@ export default {
 				.setRequired(true)
 		)
 
+
 		.addStringOption(option =>
 			option
 				.setName("codetype")
 				.setDescription("Code type")
 				.setRequired(true)
 		)
+
 
 		.addStringOption(option =>
 			option
@@ -50,12 +61,14 @@ export default {
 				.setRequired(true)
 		)
 
+
 		.addIntegerOption(option =>
 			option
 				.setName("amount")
 				.setDescription("Award amount")
 				.setRequired(true)
 		)
+
 
 		.addBooleanOption(option =>
 			option
@@ -64,6 +77,7 @@ export default {
 				.setRequired(true)
 		)
 
+
 		.addIntegerOption(option =>
 			option
 				.setName("stock")
@@ -71,19 +85,22 @@ export default {
 				.setRequired(true)
 		)
 
-.addIntegerOption(option =>
-	option
-		.setName("starting")
-		.setDescription("Starting Unix timestamp")
-		.setRequired(true)
-),
 
-.addIntegerOption(option =>
-	option
-		.setName("expiration")
-		.setDescription("Expiration Unix timestamp")
-		.setRequired(true)
-)
+		.addIntegerOption(option =>
+			option
+				.setName("starting")
+				.setDescription("Starting Unix timestamp (optional)")
+				.setRequired(false)
+		)
+
+
+		.addIntegerOption(option =>
+			option
+				.setName("expiration")
+				.setDescription("Expiration Unix timestamp (optional)")
+				.setRequired(false)
+		),
+
 
 
 	async execute(interaction: any) {
@@ -91,30 +108,59 @@ export default {
 		await interaction.deferReply();
 
 
+
 		const codename =
-			interaction.options.getString("codename", true);
+			interaction.options.getString(
+				"codename",
+				true
+			);
+
 
 		const codetype =
-			interaction.options.getString("codetype", true);
+			interaction.options.getString(
+				"codetype",
+				true
+			);
+
 
 		const award =
-			interaction.options.getString("award", true)
-				.toLowerCase();
+			interaction.options.getString(
+				"award",
+				true
+			).toLowerCase();
+
 
 		const amount =
-			interaction.options.getInteger("amount", true);
+			interaction.options.getInteger(
+				"amount",
+				true
+			);
+
 
 		const onetime =
-			interaction.options.getBoolean("onetime", true);
+			interaction.options.getBoolean(
+				"onetime",
+				true
+			);
+
 
 		const stock =
-			interaction.options.getInteger("stock", true);
+			interaction.options.getInteger(
+				"stock",
+				true
+			);
+
 
 		const starting =
-			interaction.options.getInteger("starting", true);
+			interaction.options.getInteger(
+				"starting"
+			);
+
 
 		const expiration =
-			interaction.options.getInteger("expiration", true);
+			interaction.options.getInteger(
+				"expiration"
+			);
 
 
 
@@ -143,13 +189,22 @@ export default {
 
 		const embed =
 			new EmbedBuilder()
-				.setTitle("CODE CREATED")
+
+				.setTitle(
+					"🎁 CODE CREATED"
+				)
+
 				.setDescription(
 					"A new redeemable code has been created."
 				)
-				.setColor(config.color)
+
+				.setColor(
+					config.color
+				)
+
 
 				.addFields(
+
 					{
 						name: "Code",
 						value: `\`${codename}\``,
@@ -186,28 +241,41 @@ export default {
 							stock === -1
 								? "Infinite"
 								: stock.toString(),
+
 						inline: true
 					},
 
 					{
 						name: "Starts",
-						value: `<t:${starting}:F>`,
+						value:
+							starting
+								? `<t:${starting}:F>`
+								: "Immediately",
+
 						inline: false
 					},
 
 					{
 						name: "Expires",
-						value: `<t:${expiration}:F>`,
+						value:
+							expiration
+								? `<t:${expiration}:F>`
+								: "Never",
+
 						inline: false
 					}
+
 				)
+
 
 				.setTimestamp();
 
 
 
 		if (config.image) {
-			embed.setThumbnail(config.image);
+			embed.setThumbnail(
+				config.image
+			);
 		}
 
 
@@ -217,5 +285,7 @@ export default {
 				embed
 			]
 		});
+
 	}
+
 };
