@@ -10,6 +10,8 @@ import ban from "../commands/ban.js";
 import clear from "../commands/clear.js";
 import createcode from "../commands/createcode.js";
 import gamestats from "../commands/gamestats.js";
+import find from "../commands/find.js";
+
 
 
 const commands = [
@@ -18,7 +20,8 @@ const commands = [
 	ban.data,
 	clear.data,
 	createcode.data,
-	gamestats.data
+	gamestats.data,
+	find.data
 ].map(command => command.toJSON());
 
 
