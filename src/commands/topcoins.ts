@@ -150,21 +150,20 @@ ${coins} 🪙`;
 		}
 		catch(error) {
 
-			console.error(
-				"[TopCoins Error]",
-				error
-			);
+	console.error(
+		"[TopCoins Error]",
+		error
+	);
 
 
+	await interaction.editReply({
 
-			await interaction.editReply({
-
-				content:
-					"❌ Something went wrong while fetching the leaderboard."
+		content:
+			`❌ Error: ${error instanceof Error ? error.message : String(error)}`
 
 			});
 
-		}
+		}	
 
 	}
 
