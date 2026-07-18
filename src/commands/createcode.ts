@@ -71,19 +71,19 @@ export default {
 				.setRequired(true)
 		)
 
-		.addIntegerOption(option =>
-			option
-				.setName("starting")
-				.setDescription("Starting Unix timestamp")
-				.setRequired(true)
-		)
+.addIntegerOption(option =>
+	option
+		.setName("starting")
+		.setDescription("Starting Unix timestamp")
+		.setRequired(true)
+)
 
-		.addIntegerOption(option =>
-			option
-				.setName("expiration")
-				.setDescription("Expiration Unix timestamp")
-				.setRequired(true)
-		),
+.addIntegerOption(option =>
+	option
+		.setName("expiration")
+		.setDescription("Expiration Unix timestamp")
+		.setRequired(true)
+)
 
 
 	async execute(interaction: any) {
