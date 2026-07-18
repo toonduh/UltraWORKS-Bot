@@ -4,6 +4,7 @@ import ban from "../commands/ban.js";
 import createcode from "../commands/createcode.js";
 import clear from "../commands/clear.js";
 import gamestats from "../commands/gamestats.js";
+import find from "../commands/gamestats.js";
 
 
 
@@ -13,7 +14,8 @@ const commands: Record<string, any> = {
 	ban,
 	createcode,
 	clear,
-	gamestats
+	gamestats,
+	find
 };
 
 
