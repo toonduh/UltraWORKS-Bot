@@ -6,10 +6,14 @@ app.use(express.json());
 
 let commandQueue: any[] = [];
 
-app.post("/command", (req, res) => {
-    const auth = req.headers.authorization;
+function checkAuth(req: express.Request) {
+    const auth = req.headers["x-bridge-key"];
 
-    if (auth !== process.env.BRIDGE_KEY) {
+    return auth === process.env.BRIDGE_KEY;
+}
+
+app.post("/command", (req, res) => {
+    if (!checkAuth(req)) {
         return res.status(401).json({
             error: "Unauthorized"
         });
@@ -17,7 +21,10 @@ app.post("/command", (req, res) => {
 
     console.log("Received Roblox command:", req.body);
 
-    commandQueue.push(req.body);
+    commandQueue.push({
+        id: Date.now().toString(),
+        ...req.body
+    });
 
     res.json({
         success: true
@@ -26,9 +33,7 @@ app.post("/command", (req, res) => {
 
 
 app.get("/commands", (req, res) => {
-    const auth = req.headers.authorization;
-
-    if (auth !== process.env.BRIDGE_KEY) {
+    if (!checkAuth(req)) {
         return res.status(401).json({
             error: "Unauthorized"
         });
