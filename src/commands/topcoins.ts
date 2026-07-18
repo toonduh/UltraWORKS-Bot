@@ -13,7 +13,10 @@ export default {
 	data: new SlashCommandBuilder()
 
 		.setName("topcoins")
-		.setDescription("Shows the top 10 players with the most earned coins"),
+
+		.setDescription(
+			"Shows the top 10 players with the most earned coins"
+		),
 
 
 
@@ -24,7 +27,7 @@ export default {
 
 		try {
 
-			const response =
+			const result =
 				await sendRobloxCommand(
 					"topcoins",
 					{
@@ -34,19 +37,21 @@ export default {
 
 
 
-			const result =
-				await response.json();
-
-
-
-			if (!result || !result.leaderboard) {
+			if (
+				!result ||
+				!result.leaderboard ||
+				!Array.isArray(result.leaderboard)
+			) {
 
 				await interaction.editReply({
+
 					content:
 						"❌ Failed to retrieve coin leaderboard."
+
 				});
 
 				return;
+
 			}
 
 
@@ -57,15 +62,16 @@ export default {
 
 
 			const medals = [
-    "🥇",
-    "🥈",
-    "🥉"
-];
+				"🥇",
+				"🥈",
+				"🥉"
+			];
 
 
 
 			const description =
 				leaderboard
+
 					.map(
 						(player: any, index: number) => {
 
@@ -76,11 +82,26 @@ export default {
 
 
 
-							return `${rank} **${player.username}**
-${player.coins.toLocaleString()} 🪙`;
+							const username =
+								player.username ||
+								"Unknown";
+
+
+
+							const coins =
+								Number(
+									player.coins || 0
+								)
+								.toLocaleString();
+
+
+
+							return `${rank} **${username}**
+${coins} 🪙`;
 
 						}
 					)
+
 					.join("\n\n");
 
 
@@ -93,7 +114,8 @@ ${player.coins.toLocaleString()} 🪙`;
 					)
 
 					.setDescription(
-						description
+						description ||
+						"No leaderboard data found."
 					)
 
 					.setColor(
@@ -104,7 +126,9 @@ ${player.coins.toLocaleString()} 🪙`;
 
 
 
-			if (result.topPlayerImage) {
+			if (
+				result.topPlayerImage
+			) {
 
 				embed.setImage(
 					result.topPlayerImage
@@ -116,7 +140,7 @@ ${player.coins.toLocaleString()} 🪙`;
 
 			await interaction.editReply({
 
-				embeds:[
+				embeds: [
 					embed
 				]
 
@@ -127,9 +151,10 @@ ${player.coins.toLocaleString()} 🪙`;
 		catch(error) {
 
 			console.error(
-				"[TopCoins]",
+				"[TopCoins Error]",
 				error
 			);
+
 
 
 			await interaction.editReply({
