@@ -4,17 +4,16 @@ import {
 } from "discord.js";
 
 import { sendRobloxCommand } from "../utils/bridge.js";
+import { getRobloxAssetThumbnail } from "../utils/roblox.js";
 
 
 const awardConfig: Record<string, {
-	image?: string;
+	assetId?: string;
 	color: number;
 }> = {
 
 	coins: {
-		image:
-			"https://www.roblox.com/asset-thumbnail/image?assetId=119376087221654&width=420&height=420&format=png",
-
+		assetId: "119376087221654",
 		color: 0xFFD700
 	},
 
@@ -106,7 +105,6 @@ export default {
 	async execute(interaction: any) {
 
 		await interaction.deferReply();
-
 
 
 		const codename =
@@ -202,7 +200,6 @@ export default {
 					config.color
 				)
 
-
 				.addFields(
 
 					{
@@ -241,7 +238,6 @@ export default {
 							stock === -1
 								? "Infinite"
 								: stock.toString(),
-
 						inline: true
 					},
 
@@ -251,7 +247,6 @@ export default {
 							starting
 								? `<t:${starting}:F>`
 								: "Immediately",
-
 						inline: false
 					},
 
@@ -261,21 +256,27 @@ export default {
 							expiration
 								? `<t:${expiration}:F>`
 								: "Never",
-
 						inline: false
 					}
 
 				)
 
-
 				.setTimestamp();
 
 
 
-		if (config.image) {
-			embed.setThumbnail(
-				config.image
-			);
+		// Get Roblox asset image
+		if (config.assetId) {
+
+			const image =
+				await getRobloxAssetThumbnail(
+					config.assetId
+				);
+
+			if (image) {
+				embed.setThumbnail(image);
+			}
+
 		}
 
 
