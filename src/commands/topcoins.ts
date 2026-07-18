@@ -57,10 +57,10 @@ export default {
 
 
 			const medals = [
-				"🥇",
-				🥈",
-				"🥉"
-			];
+    "🥇",
+    "🥈",
+    "🥉"
+];
 
 
 
