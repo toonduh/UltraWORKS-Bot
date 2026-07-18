@@ -4,7 +4,7 @@ import ban from "../commands/ban.js";
 import createcode from "../commands/createcode.js";
 
 
-const commands = {
+const commands: Record<string, any> = {
 	about,
 	appointmap,
 	ban,
@@ -13,46 +13,23 @@ const commands = {
 
 
 export async function handleInteraction(
-	interaction:any
+	interaction: any
 ){
 
-	if(!interaction.isChatInputCommand())
+	if (!interaction.isChatInputCommand())
 		return;
 
 
 	const command =
-		commands[
-			interaction.commandName
-		];
+		commands[interaction.commandName];
 
 
-	if(!command)
+	if (!command)
 		return;
 
 
-	try {
+	await command.execute(
+		interaction
+	);
 
-		await command.execute(
-			interaction
-		);
-
-	}
-	catch(error){
-
-		console.error(error);
-
-
-		if(interaction.deferred)
-		{
-			await interaction.editReply(
-				"Command failed."
-			);
-		}
-		else
-		{
-			await interaction.reply(
-				"Command failed."
-			);
-		}
-	}
 }
