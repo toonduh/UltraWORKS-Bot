@@ -76,7 +76,7 @@ export default {
 		.setName("starting")
 		.setDescription("Starting Unix timestamp")
 		.setRequired(true)
-)
+),
 
 .addIntegerOption(option =>
 	option
