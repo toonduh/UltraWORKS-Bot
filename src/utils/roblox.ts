@@ -31,3 +31,23 @@ export async function getRobloxAssetThumbnail(
 	return data.data?.[0]?.imageUrl;
 
 }
+
+export async function getRobloxUserId(username: string) {
+	const response = await fetch(
+		"https://users.roblox.com/v1/usernames/users",
+		{
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				usernames: [username],
+				excludeBannedUsers: false
+			})
+		}
+	);
+
+	const data: any = await response.json();
+
+	return data.data?.[0]?.id ?? null;
+}
