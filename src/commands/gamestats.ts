@@ -3,171 +3,91 @@ import {
 	EmbedBuilder
 } from "discord.js";
 
-const UNIVERSE_ID =
-	Number(process.env.ROBLOX_UNIVERSE_ID ?? 2339944792);
-
 export default {
-
 	data: new SlashCommandBuilder()
-
 		.setName("gamestats")
-
-		.setDescription(
-			"Shows live Roblox game statistics."
-		),
-
+		.setDescription("Shows live Roblox game statistics"),
 
 	async execute(interaction: any) {
-
 		await interaction.deferReply();
 
+		const universeId = 2339944792;
 
 		try {
+			// Game info
+			const gameRes = await fetch(
+				`https://games.roblox.com/v1/games?universeIds=${universeId}`
+			);
 
-			// Game information
-			const gameResponse =
-				await fetch(
-					`https://games.roblox.com/v1/games?universeIds=${UNIVERSE_ID}`
-				);
-
-			const gameData: any =
-				await gameResponse.json();
-
-			const game =
-				gameData.data?.[0];
-
-			if (!game) {
-				return interaction.editReply(
-					"❌ Failed to fetch game information."
-				);
+			if (!gameRes.ok) {
+				throw new Error(`Games API ${gameRes.status}`);
 			}
 
+			const gameJson: any = await gameRes.json();
+			const game = gameJson.data?.[0];
 
-			// Game icon
-			const iconResponse =
-				await fetch(
-					`https://thumbnails.roblox.com/v1/games/icons?universeIds=${UNIVERSE_ID}&size=512x512&format=Png&isCircular=false`
-				);
+			if (!game) {
+				throw new Error("Game not found.");
+			}
 
-			const iconData: any =
-				await iconResponse.json();
+			// Icon
+			const iconRes = await fetch(
+				`https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=512x512&format=Png&isCircular=false`
+			);
 
-			const icon =
-				iconData.data?.[0]?.imageUrl;
+			const iconJson: any = await iconRes.json();
+			const icon = iconJson.data?.[0]?.imageUrl;
 
+			// Thumbnail
+			const thumbRes = await fetch(
+				`https://thumbnails.roblox.com/v1/games/multiget/thumbnails?universeIds=${universeId}&countPerUniverse=1&defaults=true&size=768x432&format=Png&isCircular=false`
+			);
 
-			// Game thumbnail
-			const thumbnailResponse =
-				await fetch(
-					`https://thumbnails.roblox.com/v1/games/multiget/thumbnails?universeIds=${UNIVERSE_ID}&countPerUniverse=1&defaults=true&size=768x432&format=Png&isCircular=false`
-				);
-
-			const thumbnailData: any =
-				await thumbnailResponse.json();
-
+			const thumbJson: any = await thumbRes.json();
 			const thumbnail =
-				thumbnailData.data?.[0]?.thumbnails?.[0]?.imageUrl;
+				thumbJson.data?.[0]?.thumbnails?.[0]?.imageUrl;
 
+			const embed = new EmbedBuilder()
+				.setColor(0x00A2FF)
+				.setTitle(game.name)
+				.setURL(
+					`https://www.roblox.com/games/${game.rootPlaceId}`
+				)
+				.setDescription("Current live game statistics.")
+				.addFields(
+					{
+						name: "👥 Players",
+						value: game.playing.toLocaleString(),
+						inline: true
+					},
+					{
+						name: "⭐ Favorites",
+						value: game.favoritedCount.toLocaleString(),
+						inline: true
+					},
+					{
+						name: "👁️ Visits",
+						value: game.visits.toLocaleString(),
+						inline: true
+					}
+				)
+				.setFooter({
+					text: "UltraWORKS • Roblox Statistics"
+				})
+				.setTimestamp();
 
-			const embed =
-				new EmbedBuilder()
-
-					.setColor(
-						0x5865F2
-					)
-
-					.setTitle(
-						game.name
-					)
-
-					.setURL(
-						`https://www.roblox.com/games/${game.rootPlaceId}`
-					)
-
-					.setDescription(
-						"Current live Roblox game statistics."
-					)
-
-					.addFields(
-
-						{
-							name: "👥 Current Players",
-							value: game.playing.toLocaleString(),
-							inline: true
-						},
-
-						{
-							name: "👁️ Visits",
-							value: game.visits.toLocaleString(),
-							inline: true
-						},
-
-						{
-							name: "⭐ Favorites",
-							value: game.favoritedCount.toLocaleString(),
-							inline: true
-						},
-
-						{
-							name: "👍 Likes",
-							value: game.upVotes.toLocaleString(),
-							inline: true
-						},
-
-						{
-							name: "👎 Dislikes",
-							value: game.downVotes.toLocaleString(),
-							inline: true
-						},
-
-						{
-							name: "📊 Rating",
-							value:
-								`${(
-									(game.upVotes /
-										Math.max(
-											1,
-											game.upVotes +
-											game.downVotes
-										)) * 100
-								).toFixed(1)}%`,
-							inline: true
-						}
-
-					)
-
-					.setThumbnail(
-						icon
-					)
-
-					.setImage(
-						thumbnail
-					)
-
-					.setFooter({
-						text: "UltraWORKS • Live Game Statistics"
-					})
-
-					.setTimestamp();
-
+			if (icon) embed.setThumbnail(icon);
+			if (thumbnail) embed.setImage(thumbnail);
 
 			await interaction.editReply({
-				embeds: [
-					embed
-				]
+				embeds: [embed]
 			});
-
-		}
-		catch (err) {
-
+		} catch (err) {
 			console.error(err);
 
 			await interaction.editReply(
 				"❌ Failed to fetch Roblox game statistics."
 			);
-
 		}
-
 	}
-
 };
