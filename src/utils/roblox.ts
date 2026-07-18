@@ -14,3 +14,20 @@ export async function getRobloxHeadshot(
 	return data.data?.[0]?.imageUrl;
 
 }
+
+export async function getRobloxAssetThumbnail(
+	assetId:string
+){
+
+	const response = await fetch(
+		`https://thumbnails.roblox.com/v1/assets?assetIds=${assetId}&size=420x420&format=Png`
+	);
+
+
+	const data:any =
+		await response.json();
+
+
+	return data.data?.[0]?.imageUrl;
+
+}
