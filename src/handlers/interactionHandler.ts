@@ -8,7 +8,8 @@ const commands: Record<string, any> = {
 	about,
 	appointmap,
 	ban,
-	createcode
+	createcode,
+	clear
 };
 
 
