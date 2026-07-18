@@ -7,25 +7,19 @@ import {
 import about from "../commands/about.js";
 import appointmap from "../commands/appointmap.js";
 import ban from "../commands/ban.js";
-import createcode from "../commands/createcode.js";
 import clear from "../commands/clear.js";
+import createcode from "../commands/createcode.js";
+import gamestats from "../commands/gamestats.js";
 
 
 const commands = [
-
 	about.data,
-
 	appointmap.data,
-
 	ban.data,
-
+	clear.data,
 	createcode.data,
-
-	clear.data
-
-].map(
-	command => command.toJSON()
-);
+	gamestats.data
+].map(command => command.toJSON());
 
 
 
