@@ -25,17 +25,24 @@ client.once(
 	"clientReady",
 	async () => {
 
+		if (!client.user)
+			return;
+
+
 		console.log(
 			`Logged in as ${client.user.tag}`
 		);
+
 
 		await registerCommands(
 			client.user.id
 		);
 
+
 		console.log(
 			"Slash commands registered"
 		);
+
 	}
 );
 
