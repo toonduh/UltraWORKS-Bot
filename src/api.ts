@@ -4,37 +4,46 @@ const app = express();
 
 app.use(express.json());
 
+let commandQueue: any[] = [];
+
 app.post("/command", (req, res) => {
-	const key = req.headers.authorization;
+    const auth = req.headers.authorization;
 
-	if (!process.env.BRIDGE_KEY) {
-		console.error("BRIDGE_KEY is missing");
-		return res.status(500).json({
-			error: "Server bridge key not configured"
-		});
-	}
+    if (auth !== process.env.BRIDGE_KEY) {
+        return res.status(401).json({
+            error: "Unauthorized"
+        });
+    }
 
-	if (key !== process.env.BRIDGE_KEY) {
-		return res.status(401).json({
-			error: "Unauthorized"
-		});
-	}
+    console.log("Received Roblox command:", req.body);
 
-	const command = req.body;
+    commandQueue.push(req.body);
 
-	console.log("Received Roblox command:", command);
-
-	// TODO:
-	// Forward command to Roblox here
-
-	return res.json({
-		success: true,
-		command
-	});
+    res.json({
+        success: true
+    });
 });
+
+
+app.get("/commands", (req, res) => {
+    const auth = req.headers.authorization;
+
+    if (auth !== process.env.BRIDGE_KEY) {
+        return res.status(401).json({
+            error: "Unauthorized"
+        });
+    }
+
+    const commands = [...commandQueue];
+
+    commandQueue = [];
+
+    res.json(commands);
+});
+
 
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
-	console.log(`Bridge API running on port ${port}`);
+    console.log(`Bridge API running on port ${port}`);
 });
