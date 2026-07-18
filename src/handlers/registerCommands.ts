@@ -12,6 +12,7 @@ import createcode from "../commands/createcode.js";
 import gamestats from "../commands/gamestats.js";
 import find from "../commands/find.js";
 import restart from "../commands/restart.js";
+import topcoins from "../commands/topcoins.js";
 
 
 
@@ -24,6 +25,7 @@ const commands = [
 	gamestats.data,
 	find.data
 	restart.data,
+	topcoins.data
 ].map(command => command.toJSON());
 
 
