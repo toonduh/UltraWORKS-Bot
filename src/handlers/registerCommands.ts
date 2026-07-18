@@ -23,7 +23,7 @@ const commands = [
 	clear.data,
 	createcode.data,
 	gamestats.data,
-	find.data
+	find.data,
 	restart.data,
 	topcoins.data
 ].map(command => command.toJSON());
