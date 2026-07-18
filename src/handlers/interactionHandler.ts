@@ -5,6 +5,7 @@ import createcode from "../commands/createcode.js";
 import clear from "../commands/clear.js";
 import gamestats from "../commands/gamestats.js";
 import find from "../commands/find.js";
+import restart from "../commands/restart.js";
 
 
 
@@ -15,7 +16,8 @@ const commands: Record<string, any> = {
 	createcode,
 	clear,
 	gamestats,
-	find
+	find,
+	restart
 };
 
 
