@@ -3,47 +3,71 @@ export async function sendRobloxCommand(
 	data: any
 ) {
 
-	const bridgeUrl = process.env.BRIDGE_URL;
-	const bridgeKey = process.env.BRIDGE_KEY;
+	const bridgeUrl =
+		process.env.BRIDGE_URL;
+
+	const bridgeKey =
+		process.env.BRIDGE_KEY;
+
 
 	if (!bridgeUrl || !bridgeKey) {
+
 		throw new Error(
 			"Missing BRIDGE_URL or BRIDGE_KEY"
 		);
+
 	}
 
 
-	const controller = new AbortController();
 
-	const timeout = setTimeout(
-		() => controller.abort(),
-		10000
-	);
+	const controller =
+		new AbortController();
+
+
+	const timeout =
+		setTimeout(
+			() => controller.abort(),
+			10000
+		);
+
 
 
 	try {
 
-		const response = await fetch(
-			`${bridgeUrl}/command`,
-			{
-				method: "POST",
+		const response =
+			await fetch(
+				`${bridgeUrl}/command`,
+				{
 
-				headers: {
-					"Content-Type": "application/json",
-					"Authorization": bridgeKey
-				},
+					method:"POST",
 
-				body: JSON.stringify({
-					type,
-					data
-				}),
+					headers:{
 
-				signal: controller.signal
-			}
-		);
+						"Content-Type":
+							"application/json",
+
+						"Authorization":
+							bridgeKey
+
+					},
+
+					body:JSON.stringify({
+
+						type,
+
+						data
+
+					}),
+
+					signal:
+						controller.signal
+
+				}
+			);
 
 
-		if (!response.ok) {
+
+		if(!response.ok){
 
 			throw new Error(
 				`Bridge returned ${response.status}`
@@ -52,10 +76,16 @@ export async function sendRobloxCommand(
 		}
 
 
+
 		console.log(
 			"Roblox command queued:",
 			type
 		);
+
+
+
+		return true;
+
 
 	}
 
@@ -69,49 +99,88 @@ export async function sendRobloxCommand(
 
 
 
+
+
 export async function sendRobloxQuery(
 	type: string,
 	data: any
-) {
+): Promise<any> {
 
-	const bridgeUrl = process.env.BRIDGE_URL;
-	const bridgeKey = process.env.BRIDGE_KEY;
+
+	const bridgeUrl =
+		process.env.BRIDGE_URL;
+
+	const bridgeKey =
+		process.env.BRIDGE_KEY;
+
+
 
 	if (!bridgeUrl || !bridgeKey) {
+
 		throw new Error(
 			"Missing BRIDGE_URL or BRIDGE_KEY"
 		);
+
 	}
 
 
-	const controller = new AbortController();
 
-	const timeout = setTimeout(
-		() => controller.abort(),
-		10000
-	);
+	const controller =
+		new AbortController();
+
+
+
+	const timeout =
+		setTimeout(
+			() => controller.abort(),
+			10000
+		);
+
 
 
 	try {
 
-		const response = await fetch(
-			`${bridgeUrl}/command`,
-			{
-				method: "POST",
 
-				headers: {
-					"Content-Type": "application/json",
-					"Authorization": bridgeKey
-				},
+		const response =
+			await fetch(
+				`${bridgeUrl}/command`,
+				{
 
-				body: JSON.stringify({
-					type,
-					data
-				}),
+					method:"POST",
 
-				signal: controller.signal
-			}
-		);
+					headers:{
+
+						"Content-Type":
+							"application/json",
+
+						"Authorization":
+							bridgeKey
+
+					},
+
+					body:JSON.stringify({
+
+						type,
+
+						data
+
+					}),
+
+					signal:
+						controller.signal
+
+				}
+			);
+
+
+
+		if(!response.ok){
+
+			throw new Error(
+				`Bridge returned ${response.status}`
+			);
+
+		}
 
 
 
@@ -120,7 +189,15 @@ export async function sendRobloxQuery(
 
 
 
-		if (!command.id) {
+		console.log(
+			"Roblox query queued:",
+			type,
+			command
+		);
+
+
+
+		if(!command.id){
 
 			throw new Error(
 				"Bridge did not return command id"
@@ -130,14 +207,19 @@ export async function sendRobloxQuery(
 
 
 
-		for (
+		for(
 			let attempt = 0;
 			attempt < 20;
 			attempt++
-		) {
+		){
 
-			await new Promise(resolve =>
-				setTimeout(resolve, 1000)
+
+			await new Promise(
+				resolve =>
+					setTimeout(
+						resolve,
+						1000
+					)
 			);
 
 
@@ -146,17 +228,36 @@ export async function sendRobloxQuery(
 				await fetch(
 					`${bridgeUrl}/response/${command.id}`,
 					{
-						headers: {
-							"Authorization": bridgeKey
+
+						headers:{
+
+							"Authorization":
+								bridgeKey
+
 						}
+
 					}
 				);
 
 
 
-			if (result.status === 200) {
+			if(result.status === 200){
 
-				return await result.json();
+
+				const json =
+					await result.json();
+
+
+
+				console.log(
+					"Roblox response:",
+					json
+				);
+
+
+
+				return json.response ?? json;
+
 
 			}
 
@@ -167,6 +268,7 @@ export async function sendRobloxQuery(
 		throw new Error(
 			"Timed out waiting for Roblox response"
 		);
+
 
 
 	}
