@@ -4,7 +4,7 @@ import {
 } from "discord.js";
 
 import {
-	sendRobloxCommand
+	sendRobloxQuery
 } from "../utils/bridge.js";
 
 
