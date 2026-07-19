@@ -51,15 +51,14 @@ export default {
 
 
 			const result =
-				await sendRobloxCommand(
-					"appointmap",
-					{
-						map,
-						moderator:
-							interaction.user.id
-					}
-				);
-
+	await sendRobloxQuery(
+		"appointmap",
+		{
+			map,
+			moderator:
+				interaction.user.id
+		}
+	);
 
 
 			if (
