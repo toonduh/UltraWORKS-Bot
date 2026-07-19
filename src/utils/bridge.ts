@@ -12,14 +12,12 @@ export async function sendRobloxCommand(
 		);
 	}
 
-
 	const controller = new AbortController();
 
 	const timeout = setTimeout(
 		() => controller.abort(),
 		10000
 	);
-
 
 	try {
 
@@ -30,7 +28,6 @@ export async function sendRobloxCommand(
 				data
 			}
 		);
-
 
 		const response = await fetch(
 			`${bridgeUrl}/command`,
@@ -51,66 +48,13 @@ export async function sendRobloxCommand(
 			}
 		);
 
-
-		const command =
-			await response.json();
-
-
-		console.log(
-			"Bridge command response:",
-			command
-		);
-
-
-		if (!command.id) {
+		if (!response.ok) {
 			throw new Error(
-				"Bridge did not return command id"
+				`Bridge returned ${response.status}`
 			);
 		}
 
-
-		// Wait for Roblox to process response
-		for (let attempt = 0; attempt < 20; attempt++) {
-
-			await new Promise(resolve =>
-				setTimeout(resolve, 1000)
-			);
-
-
-			const result =
-				await fetch(
-					`${bridgeUrl}/response/${command.id}`,
-					{
-						headers: {
-							"Authorization": bridgeKey
-						}
-					}
-				);
-
-
-			if (result.status === 200) {
-
-				const json =
-					await result.json();
-
-
-				console.log(
-					"Roblox response:",
-					json
-				);
-
-
-				return json;
-
-			}
-
-		}
-
-
-		throw new Error(
-			"Timed out waiting for Roblox response"
-		);
-
+		return;
 
 	}
 	finally {
