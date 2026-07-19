@@ -9,8 +9,13 @@ import restart from "../commands/restart.js";
 import topcoins from "../commands/topcoins.js";
 import unban from "../commands/unban.js";
 
+import {
+	HasPermission
+} from "../utils/ranks.js";
+
 
 const commands: Record<string, any> = {
+
 	about,
 	appointmap,
 	ban,
@@ -21,7 +26,9 @@ const commands: Record<string, any> = {
 	restart,
 	topcoins,
 	unban
+
 };
+
 
 
 export async function handleInteraction(
@@ -32,12 +39,37 @@ export async function handleInteraction(
 		return;
 
 
+
 	const command =
 		commands[interaction.commandName];
 
 
+
 	if (!command)
 		return;
+
+
+
+	if (
+		!HasPermission(
+			interaction,
+			interaction.commandName
+		)
+	) {
+
+		await interaction.reply({
+
+			content:
+				"❌ You do not have permission to use this command.",
+
+			ephemeral: true
+
+		});
+
+		return;
+
+	}
+
 
 
 	await command.execute(
