@@ -118,57 +118,47 @@ export default {
 
 
 			const embed =
-				new EmbedBuilder()
+	new EmbedBuilder()
 
-					.setTitle(
-						"Map Appointed"
-					)
+		.setTitle(
+			"Map Appointed"
+		)
 
-					.setDescription(
-						`The next round map has been set to **${result.map ?? map}**.`
-					)
+		.setDescription(
+			`The next round map has been set to **${result.map ?? map}**.`
+		)
 
-					.setColor(
-						0x2ECC71
-					)
+		.setColor(
+			0x2ECC71
+		)
 
-					.addFields(
+		.addFields(
+			{
+				name: "Map",
+				value: result.map ?? map,
+				inline: true
+			},
+			{
+				name: "Moderator",
+				value: `<@${interaction.user.id}>`,
+				inline: true
+			}
+		)
 
-						{
-							name:
-								"Map",
-
-							value:
-								result.map ?? map,
-
-							inline:true
-						},
-
-						{
-							name:
-								"Moderator",
-
-							value:
-								`<@${interaction.user.id}>`,
-
-							inline:true
-						}
-
-					)
-
-					.setTimestamp();
+		.setTimestamp();
 
 
 
 			if (
-				result.image
-			) {
+	typeof result.image === "string" &&
+	result.image.startsWith("http")
+) {
 
-				embed.setImage(
-					result.image
-				);
+	embed.setImage(
+		result.image
+	);
 
-			}
+}
 
 
 
