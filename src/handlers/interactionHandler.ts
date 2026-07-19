@@ -7,6 +7,7 @@ import gamestats from "../commands/gamestats.js";
 import find from "../commands/find.js";
 import restart from "../commands/restart.js";
 import topcoins from "../commands/topcoins.js";
+import unban from "../commands/unban.js";
 
 
 const commands: Record<string, any> = {
@@ -18,7 +19,8 @@ const commands: Record<string, any> = {
 	gamestats,
 	find,
 	restart,
-	topcoins
+	topcoins,
+	unban
 };
 
 
