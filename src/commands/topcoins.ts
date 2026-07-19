@@ -28,7 +28,7 @@ export default {
 		try {
 
 			const result =
-				await sendRobloxCommand(
+				await sendRobloxQuery(
 					"topcoins",
 					{
 						requester: interaction.user.id
@@ -39,7 +39,6 @@ export default {
 
 			if (
 				!result ||
-				!result.leaderboard ||
 				!Array.isArray(result.leaderboard)
 			) {
 
@@ -56,11 +55,6 @@ export default {
 
 
 
-			const leaderboard =
-				result.leaderboard;
-
-
-
 			const medals = [
 				"🥇",
 				"🥈",
@@ -70,7 +64,7 @@ export default {
 
 
 			const description =
-				leaderboard
+				result.leaderboard
 
 					.map(
 						(player: any, index: number) => {
@@ -83,16 +77,15 @@ export default {
 
 
 							const username =
-								player.username ||
+								player.username ??
 								"Unknown";
 
 
 
 							const coins =
 								Number(
-									player.coins || 0
-								)
-								.toLocaleString();
+									player.coins ?? 0
+								).toLocaleString();
 
 
 
@@ -126,9 +119,7 @@ ${coins} 🪙`;
 
 
 
-			if (
-				result.topPlayerImage
-			) {
+			if (result.topPlayerImage) {
 
 				embed.setImage(
 					result.topPlayerImage
@@ -148,22 +139,26 @@ ${coins} 🪙`;
 
 
 		}
-		catch(error) {
+		catch (error) {
 
-	console.error(
-		"[TopCoins Error]",
-		error
-	);
+			console.error(
+				"[TopCoins Error]",
+				error
+			);
 
 
-	await interaction.editReply({
+			await interaction.editReply({
 
-		content:
-			`❌ Error: ${error instanceof Error ? error.message : String(error)}`
+				content:
+					`❌ Error: ${
+						error instanceof Error
+							? error.message
+							: String(error)
+					}`
 
 			});
 
-		}	
+		}
 
 	}
 
