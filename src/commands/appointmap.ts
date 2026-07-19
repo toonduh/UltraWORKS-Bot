@@ -13,7 +13,7 @@ export default {
 		new SlashCommandBuilder()
 			.setName("appointmap")
 			.setDescription(
-				"Appoints a Roblox map"
+				"Appoints a Map for all servers, in it's next round"
 			)
 
 			.addStringOption(option =>
