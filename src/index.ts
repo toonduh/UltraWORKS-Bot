@@ -2,7 +2,8 @@ import "./api.js";
 
 import {
 	Client,
-	GatewayIntentBits
+	GatewayIntentBits,
+	ActivityType
 } from "discord.js";
 
 import {
@@ -23,6 +24,18 @@ const client = new Client({
 });
 
 
+const statuses = [
+	"Playing Lurking Giants",
+	"Managing Roblox Servers",
+	"Watching Lurking Giants Players",
+	"Use /about to learn more!"
+];
+
+
+let statusIndex = 0;
+
+
+
 client.once(
 	"clientReady",
 	async () => {
@@ -34,6 +47,56 @@ client.once(
 		console.log(
 			`Logged in as ${client.user.tag}`
 		);
+
+
+
+		// Set initial presence
+		client.user.setPresence({
+
+			status: "online",
+
+			activities: [
+				{
+					name: statuses[0],
+					type: ActivityType.Playing
+				}
+			]
+
+		});
+
+
+
+		// Rotate presence every 30 seconds
+		setInterval(() => {
+
+			if (!client.user)
+				return;
+
+
+			statusIndex++;
+
+
+			if (statusIndex >= statuses.length)
+				statusIndex = 0;
+
+
+
+			client.user.setPresence({
+
+				status: "online",
+
+				activities: [
+					{
+						name: statuses[statusIndex],
+						type: ActivityType.Playing
+					}
+				]
+
+			});
+
+
+		}, 30000);
+
 
 
 		try {
@@ -62,6 +125,7 @@ client.once(
 );
 
 
+
 client.on(
 	"interactionCreate",
 	async interaction => {
@@ -85,6 +149,7 @@ client.on(
 	}
 
 );
+
 
 
 client.login(
