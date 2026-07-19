@@ -15,9 +15,11 @@ import {
 
 
 const client = new Client({
+
 	intents: [
 		GatewayIntentBits.Guilds
 	]
+
 });
 
 
@@ -34,25 +36,65 @@ client.once(
 		);
 
 
-		await registerCommands(
-			client.user.id
-		);
+		try {
+
+			await registerCommands(
+				client.user.id
+			);
 
 
-		console.log(
-			"Slash commands registered"
-		);
+			console.log(
+				"Slash commands registered"
+			);
+
+		}
+		catch(error){
+
+			console.error(
+				"Failed registering commands:",
+				error
+			);
+
+		}
 
 	}
+
 );
 
 
 client.on(
 	"interactionCreate",
-	handleInteraction
+	async interaction => {
+
+		try {
+
+			await handleInteraction(
+				interaction
+			);
+
+		}
+		catch(error){
+
+			console.error(
+				"Interaction error:",
+				error
+			);
+
+		}
+
+	}
+
 );
 
 
 client.login(
 	process.env.DISCORD_TOKEN
-);
+)
+.catch(error => {
+
+	console.error(
+		"Discord login failed:",
+		error
+	);
+
+});
